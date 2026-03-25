@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StatBar } from "@/components/StatBar";
 import { EventCard } from "@/components/EventCard";
@@ -29,13 +29,38 @@ export default function Index() {
   const [gameOverInfo, setGameOverInfo] = useState({ reason: '', won: false });
   const [recentEvents, setRecentEvents] = useState<string[]>([]);
   const [quote] = useState(getRandomQuote());
+  const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
+
+  // Auto-save on every stat/phase change during gameplay
+  useEffect(() => {
+    if (phase === 'event' || phase === 'result') {
+      const save = { stats, recentEvents, currentEvent, phase };
+      localStorage.setItem('olider_save', JSON.stringify(save));
+      setHasSave(true);
+    }
+  }, [stats, phase, recentEvents, currentEvent]);
 
   const startGame = useCallback(() => {
+    localStorage.removeItem('olider_save');
     setStats(INITIAL_STATS);
     setRecentEvents([]);
     const evt = getRandomEvent([], INITIAL_STATS);
     setCurrentEvent(evt);
     setPhase('event');
+  }, []);
+
+  const loadGame = useCallback(() => {
+    const raw = localStorage.getItem('olider_save');
+    if (!raw) return;
+    try {
+      const save = JSON.parse(raw);
+      setStats(save.stats);
+      setRecentEvents(save.recentEvents || []);
+      setCurrentEvent(save.currentEvent);
+      setLastChoice(null);
+      setLastEffects({});
+      setPhase('event');
+    } catch { /* corrupted save, ignore */ }
   }, []);
 
   const handleChoice = useCallback((choice: Choice) => {
@@ -47,6 +72,8 @@ export default function Index() {
 
     const gameOver = checkGameOver(newStats);
     if (gameOver.over) {
+      localStorage.removeItem('olider_save');
+      setHasSave(false);
       setGameOverInfo({ reason: gameOver.reason!, won: !!gameOver.won });
       setPhase('gameover');
     } else {
@@ -93,12 +120,22 @@ export default function Index() {
             Você é o líder de uma nação falida. Egocêntrico, calculista e indiferente ao sofrimento alheio.
             Cada decisão molda o destino do país — e o tamanho do seu ego.
           </p>
-          <button
-            onClick={startGame}
-            className="rounded border border-gold bg-gold/10 px-8 py-3 font-mono text-sm uppercase tracking-widest text-gold transition-all hover:bg-gold/20 glow-gold"
-          >
-            Assumir o Poder
-          </button>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={startGame}
+              className="rounded border border-gold bg-gold/10 px-8 py-3 font-mono text-sm uppercase tracking-widest text-gold transition-all hover:bg-gold/20 glow-gold"
+            >
+              Novo Jogo
+            </button>
+            {hasSave && (
+              <button
+                onClick={loadGame}
+                className="rounded border border-border bg-card px-8 py-3 font-mono text-sm uppercase tracking-widest text-muted-foreground transition-all hover:bg-accent hover:text-foreground"
+              >
+                Continuar
+              </button>
+            )}
+          </div>
         </motion.div>
       </div>
     );
