@@ -75,6 +75,34 @@ export const DIFFICULTY_CONFIGS: Record<Difficulty, DifficultyConfig> = {
 
 export const INITIAL_STATS: GameStats = DIFFICULTY_CONFIGS.normal.initialStats;
 
+export function getNationTier(stats: GameStats): NationTier {
+  const score = (stats.economy + stats.military + stats.reputation) / 3;
+  if (score >= 85) return 'superpotencia';
+  if (score >= 70) return 'potencia';
+  if (score >= 50) return 'desenvolvida';
+  if (score >= 30) return 'emergente';
+  if (score >= 15) return 'subdesenvolvida';
+  return 'falida';
+}
+
+export const TIER_LABELS: Record<NationTier, string> = {
+  falida: 'Estado Falido',
+  subdesenvolvida: 'Nação Subdesenvolvida',
+  emergente: 'Economia Emergente',
+  desenvolvida: 'Nação Desenvolvida',
+  potencia: 'Potência Regional',
+  superpotencia: 'Superpotência Mundial',
+};
+
+export const TIER_COLORS: Record<NationTier, string> = {
+  falida: 'text-blood',
+  subdesenvolvida: 'text-muted-foreground',
+  emergente: 'text-foreground',
+  desenvolvida: 'text-primary',
+  potencia: 'text-gold',
+  superpotencia: 'text-gold',
+};
+
 export const LEADER_QUOTES = [
   "O povo? O povo que se vire. Eu tenho uma nação pra construir.",
   "Eles não entendem o fardo de carregar esse país nas costas.",
