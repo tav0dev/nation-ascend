@@ -4,6 +4,7 @@ import { StatBar } from "@/components/StatBar";
 import { EventCard } from "@/components/EventCard";
 import { ResultPanel } from "@/components/ResultPanel";
 import { GameOverScreen } from "@/components/GameOverScreen";
+import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
   type Choice,
@@ -123,16 +124,19 @@ export default function Index() {
 
         <div className="grid gap-6 md:grid-cols-[280px_1fr]">
           {/* Stats Panel */}
-          <div className="space-y-3 rounded border border-border bg-card p-4">
-            <h2 className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Indicadores Nacionais
-            </h2>
-            <StatBar label="Economia" value={stats.economy} colorClass="stat-economy" icon="📊" showChange={lastEffects.economy} />
-            <StatBar label="Militar" value={stats.military} colorClass="stat-military" icon="⚔️" showChange={lastEffects.military} />
-            <StatBar label="Felicidade" value={stats.happiness} colorClass="stat-happiness" icon="😐" showChange={lastEffects.happiness} />
-            <StatBar label="Corrupção" value={stats.corruption} colorClass="stat-corruption" icon="🐀" showChange={lastEffects.corruption} />
-            <StatBar label="Reputação" value={stats.reputation} colorClass="stat-reputation" icon="🌐" showChange={lastEffects.reputation} />
-            <StatBar label="Ego" value={stats.ego} colorClass="stat-ego" icon="👑" showChange={lastEffects.ego} />
+          <div className="space-y-4">
+            <div className="space-y-3 rounded border border-border bg-card p-4">
+              <h2 className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                Indicadores Nacionais
+              </h2>
+              <StatBar label="Economia" value={stats.economy} colorClass="stat-economy" icon="📊" showChange={lastEffects.economy} />
+              <StatBar label="Militar" value={stats.military} colorClass="stat-military" icon="⚔️" showChange={lastEffects.military} />
+              <StatBar label="Felicidade" value={stats.happiness} colorClass="stat-happiness" icon="😐" showChange={lastEffects.happiness} />
+              <StatBar label="Corrupção" value={stats.corruption} colorClass="stat-corruption" icon="🐀" showChange={lastEffects.corruption} />
+              <StatBar label="Reputação" value={stats.reputation} colorClass="stat-reputation" icon="🌐" showChange={lastEffects.reputation} />
+              <StatBar label="Ego" value={stats.ego} colorClass="stat-ego" icon="👑" showChange={lastEffects.ego} />
+            </div>
+            <AdvisorPanel stats={stats} />
           </div>
 
           {/* Main Panel */}
