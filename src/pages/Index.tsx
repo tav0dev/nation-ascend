@@ -73,7 +73,13 @@ export default function Index() {
     setStats(newStats);
     setLastChoice(choice);
     setLastEffects(choice.effects);
-
+    setDecisionLog(prev => [...prev, {
+      turn: stats.turn,
+      eventTitle: currentEvent.title,
+      choiceText: choice.text,
+      flavor: choice.flavor,
+      effects: choice.effects,
+    }]);
     const gameOver = checkGameOver(newStats);
     if (gameOver.over) {
       localStorage.removeItem('olider_save');
