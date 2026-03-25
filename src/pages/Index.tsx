@@ -72,6 +72,8 @@ export default function Index() {
 
     const gameOver = checkGameOver(newStats);
     if (gameOver.over) {
+      localStorage.removeItem('olider_save');
+      setHasSave(false);
       setGameOverInfo({ reason: gameOver.reason!, won: !!gameOver.won });
       setPhase('gameover');
     } else {
