@@ -162,10 +162,11 @@ export default function Index() {
               {TIER_LABELS[tier]}
             </p>
           </div>
-          <div className="flex gap-4 font-mono text-xs text-muted-foreground">
+          <div className="flex items-center gap-4 font-mono text-xs text-muted-foreground">
             <span>Turno {stats.turn}</span>
             <span>💰 ${stats.treasury}B</span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
+            <DecisionLog entries={decisionLog} />
           </div>
         </div>
 
