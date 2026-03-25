@@ -103,6 +103,7 @@ export default function Index() {
   }, [currentEvent.id, recentEvents]);
 
   const tier = getNationTier(stats);
+  const { newlyUnlocked, dismissNew } = useAchievements(stats, stats.turn);
 
   if (phase === 'gameover') {
     return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={startGame} />;
