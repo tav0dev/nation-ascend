@@ -10,7 +10,9 @@ import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
   type Choice,
+  type Difficulty,
   INITIAL_STATS,
+  DIFFICULTY_CONFIGS,
   getRandomEvent,
   getRandomQuote,
   applyEffects,
