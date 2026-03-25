@@ -32,7 +32,7 @@ export default function Index() {
   const startGame = useCallback(() => {
     setStats(INITIAL_STATS);
     setRecentEvents([]);
-    const evt = getRandomEvent();
+    const evt = getRandomEvent([], INITIAL_STATS);
     setCurrentEvent(evt);
     setPhase('event');
   }, []);
