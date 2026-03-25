@@ -111,7 +111,7 @@ export default function Index() {
   const { newlyUnlocked, dismissNew } = useAchievements(stats, stats.turn);
 
   if (phase === 'gameover') {
-    return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={startGame} />;
+    return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={() => setPhase('menu')} />;
   }
 
   if (phase === 'menu') {
