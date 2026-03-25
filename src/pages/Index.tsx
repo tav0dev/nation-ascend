@@ -4,6 +4,7 @@ import { StatBar } from "@/components/StatBar";
 import { EventCard } from "@/components/EventCard";
 import { ResultPanel } from "@/components/ResultPanel";
 import { GameOverScreen } from "@/components/GameOverScreen";
+import { DecisionLog, type DecisionEntry } from "@/components/DecisionLog";
 import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
@@ -28,13 +29,14 @@ export default function Index() {
   const [lastEffects, setLastEffects] = useState<Partial<GameStats>>({});
   const [gameOverInfo, setGameOverInfo] = useState({ reason: '', won: false });
   const [recentEvents, setRecentEvents] = useState<string[]>([]);
+  const [decisionLog, setDecisionLog] = useState<DecisionEntry[]>([]);
   const [quote] = useState(getRandomQuote());
   const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
 
   // Auto-save on every stat/phase change during gameplay
   useEffect(() => {
     if (phase === 'event' || phase === 'result') {
-      const save = { stats, recentEvents, currentEvent, phase };
+      const save = { stats, recentEvents, currentEvent, phase, decisionLog };
       localStorage.setItem('olider_save', JSON.stringify(save));
       setHasSave(true);
     }
@@ -44,6 +46,7 @@ export default function Index() {
     localStorage.removeItem('olider_save');
     setStats(INITIAL_STATS);
     setRecentEvents([]);
+    setDecisionLog([]);
     const evt = getRandomEvent([], INITIAL_STATS);
     setCurrentEvent(evt);
     setPhase('event');
@@ -56,6 +59,7 @@ export default function Index() {
       const save = JSON.parse(raw);
       setStats(save.stats);
       setRecentEvents(save.recentEvents || []);
+      setDecisionLog(save.decisionLog || []);
       setCurrentEvent(save.currentEvent);
       setLastChoice(null);
       setLastEffects({});
@@ -69,7 +73,13 @@ export default function Index() {
     setStats(newStats);
     setLastChoice(choice);
     setLastEffects(choice.effects);
-
+    setDecisionLog(prev => [...prev, {
+      turn: stats.turn,
+      eventTitle: currentEvent.title,
+      choiceText: choice.text,
+      flavor: choice.flavor,
+      effects: choice.effects,
+    }]);
     const gameOver = checkGameOver(newStats);
     if (gameOver.over) {
       localStorage.removeItem('olider_save');
@@ -152,10 +162,11 @@ export default function Index() {
               {TIER_LABELS[tier]}
             </p>
           </div>
-          <div className="flex gap-4 font-mono text-xs text-muted-foreground">
+          <div className="flex items-center gap-4 font-mono text-xs text-muted-foreground">
             <span>Turno {stats.turn}</span>
             <span>💰 ${stats.treasury}B</span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
+            <DecisionLog entries={decisionLog} />
           </div>
         </div>
 
