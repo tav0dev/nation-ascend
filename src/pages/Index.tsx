@@ -118,12 +118,22 @@ export default function Index() {
             Você é o líder de uma nação falida. Egocêntrico, calculista e indiferente ao sofrimento alheio.
             Cada decisão molda o destino do país — e o tamanho do seu ego.
           </p>
-          <button
-            onClick={startGame}
-            className="rounded border border-gold bg-gold/10 px-8 py-3 font-mono text-sm uppercase tracking-widest text-gold transition-all hover:bg-gold/20 glow-gold"
-          >
-            Assumir o Poder
-          </button>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={startGame}
+              className="rounded border border-gold bg-gold/10 px-8 py-3 font-mono text-sm uppercase tracking-widest text-gold transition-all hover:bg-gold/20 glow-gold"
+            >
+              Novo Jogo
+            </button>
+            {hasSave && (
+              <button
+                onClick={loadGame}
+                className="rounded border border-border bg-card px-8 py-3 font-mono text-sm uppercase tracking-widest text-muted-foreground transition-all hover:bg-accent hover:text-foreground"
+              >
+                Continuar
+              </button>
+            )}
+          </div>
         </motion.div>
       </div>
     );
