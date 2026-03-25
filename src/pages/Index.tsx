@@ -29,6 +29,7 @@ export default function Index() {
   const [lastEffects, setLastEffects] = useState<Partial<GameStats>>({});
   const [gameOverInfo, setGameOverInfo] = useState({ reason: '', won: false });
   const [recentEvents, setRecentEvents] = useState<string[]>([]);
+  const [decisionLog, setDecisionLog] = useState<DecisionEntry[]>([]);
   const [quote] = useState(getRandomQuote());
   const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
 
