@@ -26,45 +26,54 @@ export interface GameEvent {
 
 export type NationTier = 'falida' | 'subdesenvolvida' | 'emergente' | 'desenvolvida' | 'potencia' | 'superpotencia';
 
-export function getNationTier(stats: GameStats): NationTier {
-  const score = (stats.economy + stats.military + stats.reputation) / 3;
-  if (score < 20) return 'falida';
-  if (score < 35) return 'subdesenvolvida';
-  if (score < 50) return 'emergente';
-  if (score < 70) return 'desenvolvida';
-  if (score < 85) return 'potencia';
-  return 'superpotencia';
+export type Difficulty = 'easy' | 'normal' | 'hard';
+
+export interface DifficultyConfig {
+  label: string;
+  description: string;
+  icon: string;
+  initialStats: GameStats;
+  effectMultiplier: number; // >1 = harsher negatives, <1 = softer
+  positiveMultiplier: number; // <1 = less reward on hard
 }
 
-export const TIER_LABELS: Record<NationTier, string> = {
-  falida: 'Estado Falido',
-  subdesenvolvida: 'Nação Subdesenvolvida',
-  emergente: 'Economia Emergente',
-  desenvolvida: 'Nação Desenvolvida',
-  potencia: 'Potência Regional',
-  superpotencia: 'Superpotência Mundial',
+export const DIFFICULTY_CONFIGS: Record<Difficulty, DifficultyConfig> = {
+  easy: {
+    label: 'Fácil',
+    description: 'Mais recursos iniciais, efeitos negativos reduzidos',
+    icon: '🟢',
+    initialStats: {
+      economy: 20, military: 15, happiness: 25, corruption: 50,
+      reputation: 15, ego: 40, treasury: 200, population: 25_000_000, turn: 1,
+    },
+    effectMultiplier: 0.6,
+    positiveMultiplier: 1.3,
+  },
+  normal: {
+    label: 'Normal',
+    description: 'A experiência padrão — sem piedade, sem exagero',
+    icon: '🟡',
+    initialStats: {
+      economy: 8, military: 5, happiness: 12, corruption: 75,
+      reputation: 3, ego: 50, treasury: 100, population: 15_000_000, turn: 1,
+    },
+    effectMultiplier: 1.0,
+    positiveMultiplier: 1.0,
+  },
+  hard: {
+    label: 'Difícil',
+    description: 'Nação devastada, efeitos brutais, erro = morte',
+    icon: '🔴',
+    initialStats: {
+      economy: 3, military: 2, happiness: 5, corruption: 90,
+      reputation: 1, ego: 60, treasury: 40, population: 8_000_000, turn: 1,
+    },
+    effectMultiplier: 1.5,
+    positiveMultiplier: 0.7,
+  },
 };
 
-export const TIER_COLORS: Record<NationTier, string> = {
-  falida: 'text-blood',
-  subdesenvolvida: 'text-muted-foreground',
-  emergente: 'text-foreground',
-  desenvolvida: 'text-primary',
-  potencia: 'text-gold',
-  superpotencia: 'text-gold',
-};
-
-export const INITIAL_STATS: GameStats = {
-  economy: 8,
-  military: 5,
-  happiness: 12,
-  corruption: 75,
-  reputation: 3,
-  ego: 50,
-  treasury: 100,
-  population: 15_000_000,
-  turn: 1,
-};
+export const INITIAL_STATS: GameStats = DIFFICULTY_CONFIGS.normal.initialStats;
 
 export const LEADER_QUOTES = [
   "O povo? O povo que se vire. Eu tenho uma nação pra construir.",
