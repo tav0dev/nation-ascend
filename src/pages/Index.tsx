@@ -46,6 +46,7 @@ export default function Index() {
     localStorage.removeItem('olider_save');
     setStats(INITIAL_STATS);
     setRecentEvents([]);
+    setDecisionLog([]);
     const evt = getRandomEvent([], INITIAL_STATS);
     setCurrentEvent(evt);
     setPhase('event');
