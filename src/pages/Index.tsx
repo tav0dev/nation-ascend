@@ -46,12 +46,14 @@ export default function Index() {
     }
   }, [stats, phase, recentEvents, currentEvent]);
 
-  const startGame = useCallback(() => {
+  const startGame = useCallback((diff: Difficulty) => {
     localStorage.removeItem('olider_save');
-    setStats(INITIAL_STATS);
+    setDifficulty(diff);
+    const initial = DIFFICULTY_CONFIGS[diff].initialStats;
+    setStats(initial);
     setRecentEvents([]);
     setDecisionLog([]);
-    const evt = getRandomEvent([], INITIAL_STATS);
+    const evt = getRandomEvent([], initial);
     setCurrentEvent(evt);
     setPhase('event');
   }, []);
