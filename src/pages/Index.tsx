@@ -138,12 +138,25 @@ export default function Index() {
             Cada decisão molda o destino do país — e o tamanho do seu ego.
           </p>
           <div className="flex flex-col gap-3">
-            <button
-              onClick={startGame}
-              className="rounded border border-gold bg-gold/10 px-8 py-3 font-mono text-sm uppercase tracking-widest text-gold transition-all hover:bg-gold/20 glow-gold"
-            >
-              Novo Jogo
-            </button>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+              Escolha a dificuldade
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {(['easy', 'normal', 'hard'] as Difficulty[]).map((diff) => {
+                const cfg = DIFFICULTY_CONFIGS[diff];
+                return (
+                  <button
+                    key={diff}
+                    onClick={() => startGame(diff)}
+                    className="group flex flex-col items-center gap-1 rounded border border-border bg-card p-3 font-mono text-xs transition-all hover:border-gold hover:bg-gold/10"
+                  >
+                    <span className="text-lg">{cfg.icon}</span>
+                    <span className="font-bold text-foreground group-hover:text-gold">{cfg.label}</span>
+                    <span className="text-[9px] text-muted-foreground leading-tight text-center">{cfg.description}</span>
+                  </button>
+                );
+              })}
+            </div>
             {hasSave && (
               <button
                 onClick={loadGame}
