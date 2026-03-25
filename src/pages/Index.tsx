@@ -35,6 +35,7 @@ export default function Index() {
   const [decisionLog, setDecisionLog] = useState<DecisionEntry[]>([]);
   const [quote] = useState(getRandomQuote());
   const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
+  const [difficulty, setDifficulty] = useState<Difficulty>('normal');
 
   // Auto-save on every stat/phase change during gameplay
   useEffect(() => {
