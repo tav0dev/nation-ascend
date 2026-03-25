@@ -169,6 +169,7 @@ export default function Index() {
             <span>💰 ${stats.treasury}B</span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
             <DecisionLog entries={decisionLog} />
+            <AchievementPanel />
           </div>
         </div>
 
