@@ -4,6 +4,7 @@ import { StatBar } from "@/components/StatBar";
 import { EventCard } from "@/components/EventCard";
 import { ResultPanel } from "@/components/ResultPanel";
 import { GameOverScreen } from "@/components/GameOverScreen";
+import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
   type Choice,
