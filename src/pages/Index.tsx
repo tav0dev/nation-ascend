@@ -66,6 +66,7 @@ export default function Index() {
       setStats(save.stats);
       setRecentEvents(save.recentEvents || []);
       setDifficulty(save.difficulty || 'normal');
+      setDecisionLog(save.decisionLog || []);
       setCurrentEvent(save.currentEvent);
       setLastChoice(null);
       setLastEffects({});
