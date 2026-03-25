@@ -32,7 +32,7 @@ export default function Index() {
   const startGame = useCallback(() => {
     setStats(INITIAL_STATS);
     setRecentEvents([]);
-    const evt = getRandomEvent();
+    const evt = getRandomEvent([], INITIAL_STATS);
     setCurrentEvent(evt);
     setPhase('event');
   }, []);
@@ -56,7 +56,7 @@ export default function Index() {
   const nextTurn = useCallback(() => {
     const recent = [...recentEvents, currentEvent.id].slice(-5);
     setRecentEvents(recent);
-    const evt = getRandomEvent(recent);
+    const evt = getRandomEvent(recent, stats);
     setCurrentEvent(evt);
     setLastChoice(null);
     setLastEffects({});
