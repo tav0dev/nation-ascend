@@ -557,17 +557,25 @@ export function clampStat(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, value));
 }
 
-export function applyEffects(stats: GameStats, effects: Partial<GameStats>): GameStats {
+export function applyEffects(stats: GameStats, effects: Partial<GameStats>, difficulty: Difficulty = 'normal'): GameStats {
+  const config = DIFFICULTY_CONFIGS[difficulty];
+  const scale = (val: number | undefined, key: string): number => {
+    if (!val) return 0;
+    // corruption is inverted: positive corruption is bad
+    const isBad = key === 'corruption' ? val > 0 : val < 0;
+    return Math.round(val * (isBad ? config.effectMultiplier : config.positiveMultiplier));
+  };
+
   return {
     ...stats,
-    economy: clampStat((stats.economy || 0) + (effects.economy || 0)),
-    military: clampStat((stats.military || 0) + (effects.military || 0)),
-    happiness: clampStat((stats.happiness || 0) + (effects.happiness || 0)),
-    corruption: clampStat((stats.corruption || 0) + (effects.corruption || 0)),
-    reputation: clampStat((stats.reputation || 0) + (effects.reputation || 0)),
-    ego: clampStat((stats.ego || 0) + (effects.ego || 0)),
-    treasury: Math.max(0, (stats.treasury || 0) + (effects.treasury || 0)),
-    population: Math.max(1000000, (stats.population || 0) + (effects.population || 0)),
+    economy: clampStat((stats.economy || 0) + scale(effects.economy, 'economy')),
+    military: clampStat((stats.military || 0) + scale(effects.military, 'military')),
+    happiness: clampStat((stats.happiness || 0) + scale(effects.happiness, 'happiness')),
+    corruption: clampStat((stats.corruption || 0) + scale(effects.corruption, 'corruption')),
+    reputation: clampStat((stats.reputation || 0) + scale(effects.reputation, 'reputation')),
+    ego: clampStat((stats.ego || 0) + scale(effects.ego, 'ego')),
+    treasury: Math.max(0, (stats.treasury || 0) + scale(effects.treasury, 'treasury')),
+    population: Math.max(1000000, (stats.population || 0) + scale(effects.population, 'population')),
     turn: stats.turn,
   };
 }
