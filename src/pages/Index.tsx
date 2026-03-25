@@ -29,13 +29,38 @@ export default function Index() {
   const [gameOverInfo, setGameOverInfo] = useState({ reason: '', won: false });
   const [recentEvents, setRecentEvents] = useState<string[]>([]);
   const [quote] = useState(getRandomQuote());
+  const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
+
+  // Auto-save on every stat/phase change during gameplay
+  useEffect(() => {
+    if (phase === 'event' || phase === 'result') {
+      const save = { stats, recentEvents, currentEvent, phase };
+      localStorage.setItem('olider_save', JSON.stringify(save));
+      setHasSave(true);
+    }
+  }, [stats, phase, recentEvents, currentEvent]);
 
   const startGame = useCallback(() => {
+    localStorage.removeItem('olider_save');
     setStats(INITIAL_STATS);
     setRecentEvents([]);
     const evt = getRandomEvent([], INITIAL_STATS);
     setCurrentEvent(evt);
     setPhase('event');
+  }, []);
+
+  const loadGame = useCallback(() => {
+    const raw = localStorage.getItem('olider_save');
+    if (!raw) return;
+    try {
+      const save = JSON.parse(raw);
+      setStats(save.stats);
+      setRecentEvents(save.recentEvents || []);
+      setCurrentEvent(save.currentEvent);
+      setLastChoice(null);
+      setLastEffects({});
+      setPhase('event');
+    } catch { /* corrupted save, ignore */ }
   }, []);
 
   const handleChoice = useCallback((choice: Choice) => {
