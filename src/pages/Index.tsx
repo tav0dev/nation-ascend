@@ -5,6 +5,7 @@ import { EventCard } from "@/components/EventCard";
 import { ResultPanel } from "@/components/ResultPanel";
 import { GameOverScreen } from "@/components/GameOverScreen";
 import { DecisionLog, type DecisionEntry } from "@/components/DecisionLog";
+import { useAchievements, AchievementToast, AchievementPanel } from "@/components/Achievements";
 import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
@@ -102,6 +103,7 @@ export default function Index() {
   }, [currentEvent.id, recentEvents]);
 
   const tier = getNationTier(stats);
+  const { newlyUnlocked, dismissNew } = useAchievements(stats, stats.turn);
 
   if (phase === 'gameover') {
     return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={startGame} />;
@@ -153,6 +155,9 @@ export default function Index() {
 
   return (
     <div className="min-h-screen p-4 md:p-6">
+      <AnimatePresence>
+        {newlyUnlocked && <AchievementToast achievement={newlyUnlocked} onDismiss={dismissNew} />}
+      </AnimatePresence>
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-2 border-b border-border pb-4 md:flex-row md:items-center md:justify-between">
@@ -167,6 +172,7 @@ export default function Index() {
             <span>💰 ${stats.treasury}B</span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
             <DecisionLog entries={decisionLog} />
+            <AchievementPanel />
           </div>
         </div>
 
