@@ -65,7 +65,7 @@ export default function Index() {
       const save = JSON.parse(raw);
       setStats(save.stats);
       setRecentEvents(save.recentEvents || []);
-      setDecisionLog(save.decisionLog || []);
+      setDifficulty(save.difficulty || 'normal');
       setCurrentEvent(save.currentEvent);
       setLastChoice(null);
       setLastEffects({});
