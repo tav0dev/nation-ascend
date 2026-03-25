@@ -155,6 +155,9 @@ export default function Index() {
 
   return (
     <div className="min-h-screen p-4 md:p-6">
+      <AnimatePresence>
+        {newlyUnlocked && <AchievementToast achievement={newlyUnlocked} onDismiss={dismissNew} />}
+      </AnimatePresence>
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-2 border-b border-border pb-4 md:flex-row md:items-center md:justify-between">
