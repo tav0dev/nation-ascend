@@ -5,6 +5,7 @@ import { EventCard } from "@/components/EventCard";
 import { ResultPanel } from "@/components/ResultPanel";
 import { GameOverScreen } from "@/components/GameOverScreen";
 import { DecisionLog, type DecisionEntry } from "@/components/DecisionLog";
+import { useAchievements, AchievementToast, AchievementPanel } from "@/components/Achievements";
 import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
