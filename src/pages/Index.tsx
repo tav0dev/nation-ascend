@@ -10,7 +10,9 @@ import { AdvisorPanel } from "@/components/AdvisorPanel";
 import {
   type GameStats,
   type Choice,
+  type Difficulty,
   INITIAL_STATS,
+  DIFFICULTY_CONFIGS,
   getRandomEvent,
   getRandomQuote,
   applyEffects,
@@ -33,22 +35,25 @@ export default function Index() {
   const [decisionLog, setDecisionLog] = useState<DecisionEntry[]>([]);
   const [quote] = useState(getRandomQuote());
   const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
+  const [difficulty, setDifficulty] = useState<Difficulty>('normal');
 
   // Auto-save on every stat/phase change during gameplay
   useEffect(() => {
     if (phase === 'event' || phase === 'result') {
-      const save = { stats, recentEvents, currentEvent, phase, decisionLog };
+      const save = { stats, recentEvents, currentEvent, phase, decisionLog, difficulty };
       localStorage.setItem('olider_save', JSON.stringify(save));
       setHasSave(true);
     }
   }, [stats, phase, recentEvents, currentEvent]);
 
-  const startGame = useCallback(() => {
+  const startGame = useCallback((diff: Difficulty) => {
     localStorage.removeItem('olider_save');
-    setStats(INITIAL_STATS);
+    setDifficulty(diff);
+    const initial = DIFFICULTY_CONFIGS[diff].initialStats;
+    setStats(initial);
     setRecentEvents([]);
     setDecisionLog([]);
-    const evt = getRandomEvent([], INITIAL_STATS);
+    const evt = getRandomEvent([], initial);
     setCurrentEvent(evt);
     setPhase('event');
   }, []);
@@ -60,6 +65,7 @@ export default function Index() {
       const save = JSON.parse(raw);
       setStats(save.stats);
       setRecentEvents(save.recentEvents || []);
+      setDifficulty(save.difficulty || 'normal');
       setDecisionLog(save.decisionLog || []);
       setCurrentEvent(save.currentEvent);
       setLastChoice(null);
@@ -69,7 +75,7 @@ export default function Index() {
   }, []);
 
   const handleChoice = useCallback((choice: Choice) => {
-    const newStats = applyEffects(stats, choice.effects);
+    const newStats = applyEffects(stats, choice.effects, difficulty);
     newStats.turn = stats.turn + 1;
     setStats(newStats);
     setLastChoice(choice);
@@ -106,7 +112,7 @@ export default function Index() {
   const { newlyUnlocked, dismissNew } = useAchievements(stats, stats.turn);
 
   if (phase === 'gameover') {
-    return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={startGame} />;
+    return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={() => setPhase('menu')} />;
   }
 
   if (phase === 'menu') {
@@ -133,12 +139,25 @@ export default function Index() {
             Cada decisão molda o destino do país — e o tamanho do seu ego.
           </p>
           <div className="flex flex-col gap-3">
-            <button
-              onClick={startGame}
-              className="rounded border border-gold bg-gold/10 px-8 py-3 font-mono text-sm uppercase tracking-widest text-gold transition-all hover:bg-gold/20 glow-gold"
-            >
-              Novo Jogo
-            </button>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+              Escolha a dificuldade
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {(['easy', 'normal', 'hard'] as Difficulty[]).map((diff) => {
+                const cfg = DIFFICULTY_CONFIGS[diff];
+                return (
+                  <button
+                    key={diff}
+                    onClick={() => startGame(diff)}
+                    className="group flex flex-col items-center gap-1 rounded border border-border bg-card p-3 font-mono text-xs transition-all hover:border-gold hover:bg-gold/10"
+                  >
+                    <span className="text-lg">{cfg.icon}</span>
+                    <span className="font-bold text-foreground group-hover:text-gold">{cfg.label}</span>
+                    <span className="text-[9px] text-muted-foreground leading-tight text-center">{cfg.description}</span>
+                  </button>
+                );
+              })}
+            </div>
             {hasSave && (
               <button
                 onClick={loadGame}
@@ -168,6 +187,7 @@ export default function Index() {
             </p>
           </div>
           <div className="flex items-center gap-4 font-mono text-xs text-muted-foreground">
+            <span>{DIFFICULTY_CONFIGS[difficulty].icon} {DIFFICULTY_CONFIGS[difficulty].label}</span>
             <span>Turno {stats.turn}</span>
             <span>💰 ${stats.treasury}B</span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>

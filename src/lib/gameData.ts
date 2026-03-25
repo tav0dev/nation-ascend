@@ -26,14 +26,63 @@ export interface GameEvent {
 
 export type NationTier = 'falida' | 'subdesenvolvida' | 'emergente' | 'desenvolvida' | 'potencia' | 'superpotencia';
 
+export type Difficulty = 'easy' | 'normal' | 'hard';
+
+export interface DifficultyConfig {
+  label: string;
+  description: string;
+  icon: string;
+  initialStats: GameStats;
+  effectMultiplier: number; // >1 = harsher negatives, <1 = softer
+  positiveMultiplier: number; // <1 = less reward on hard
+}
+
+export const DIFFICULTY_CONFIGS: Record<Difficulty, DifficultyConfig> = {
+  easy: {
+    label: 'Fácil',
+    description: 'Mais recursos iniciais, efeitos negativos reduzidos',
+    icon: '🟢',
+    initialStats: {
+      economy: 20, military: 15, happiness: 25, corruption: 50,
+      reputation: 15, ego: 40, treasury: 200, population: 25_000_000, turn: 1,
+    },
+    effectMultiplier: 0.6,
+    positiveMultiplier: 1.3,
+  },
+  normal: {
+    label: 'Normal',
+    description: 'A experiência padrão — sem piedade, sem exagero',
+    icon: '🟡',
+    initialStats: {
+      economy: 8, military: 5, happiness: 12, corruption: 75,
+      reputation: 3, ego: 50, treasury: 100, population: 15_000_000, turn: 1,
+    },
+    effectMultiplier: 1.0,
+    positiveMultiplier: 1.0,
+  },
+  hard: {
+    label: 'Difícil',
+    description: 'Nação devastada, efeitos brutais, erro = morte',
+    icon: '🔴',
+    initialStats: {
+      economy: 3, military: 2, happiness: 5, corruption: 90,
+      reputation: 1, ego: 60, treasury: 40, population: 8_000_000, turn: 1,
+    },
+    effectMultiplier: 1.5,
+    positiveMultiplier: 0.7,
+  },
+};
+
+export const INITIAL_STATS: GameStats = DIFFICULTY_CONFIGS.normal.initialStats;
+
 export function getNationTier(stats: GameStats): NationTier {
   const score = (stats.economy + stats.military + stats.reputation) / 3;
-  if (score < 20) return 'falida';
-  if (score < 35) return 'subdesenvolvida';
-  if (score < 50) return 'emergente';
-  if (score < 70) return 'desenvolvida';
-  if (score < 85) return 'potencia';
-  return 'superpotencia';
+  if (score >= 85) return 'superpotencia';
+  if (score >= 70) return 'potencia';
+  if (score >= 50) return 'desenvolvida';
+  if (score >= 30) return 'emergente';
+  if (score >= 15) return 'subdesenvolvida';
+  return 'falida';
 }
 
 export const TIER_LABELS: Record<NationTier, string> = {
@@ -52,18 +101,6 @@ export const TIER_COLORS: Record<NationTier, string> = {
   desenvolvida: 'text-primary',
   potencia: 'text-gold',
   superpotencia: 'text-gold',
-};
-
-export const INITIAL_STATS: GameStats = {
-  economy: 8,
-  military: 5,
-  happiness: 12,
-  corruption: 75,
-  reputation: 3,
-  ego: 50,
-  treasury: 100,
-  population: 15_000_000,
-  turn: 1,
 };
 
 export const LEADER_QUOTES = [
@@ -548,17 +585,25 @@ export function clampStat(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, value));
 }
 
-export function applyEffects(stats: GameStats, effects: Partial<GameStats>): GameStats {
+export function applyEffects(stats: GameStats, effects: Partial<GameStats>, difficulty: Difficulty = 'normal'): GameStats {
+  const config = DIFFICULTY_CONFIGS[difficulty];
+  const scale = (val: number | undefined, key: string): number => {
+    if (!val) return 0;
+    // corruption is inverted: positive corruption is bad
+    const isBad = key === 'corruption' ? val > 0 : val < 0;
+    return Math.round(val * (isBad ? config.effectMultiplier : config.positiveMultiplier));
+  };
+
   return {
     ...stats,
-    economy: clampStat((stats.economy || 0) + (effects.economy || 0)),
-    military: clampStat((stats.military || 0) + (effects.military || 0)),
-    happiness: clampStat((stats.happiness || 0) + (effects.happiness || 0)),
-    corruption: clampStat((stats.corruption || 0) + (effects.corruption || 0)),
-    reputation: clampStat((stats.reputation || 0) + (effects.reputation || 0)),
-    ego: clampStat((stats.ego || 0) + (effects.ego || 0)),
-    treasury: Math.max(0, (stats.treasury || 0) + (effects.treasury || 0)),
-    population: Math.max(1000000, (stats.population || 0) + (effects.population || 0)),
+    economy: clampStat((stats.economy || 0) + scale(effects.economy, 'economy')),
+    military: clampStat((stats.military || 0) + scale(effects.military, 'military')),
+    happiness: clampStat((stats.happiness || 0) + scale(effects.happiness, 'happiness')),
+    corruption: clampStat((stats.corruption || 0) + scale(effects.corruption, 'corruption')),
+    reputation: clampStat((stats.reputation || 0) + scale(effects.reputation, 'reputation')),
+    ego: clampStat((stats.ego || 0) + scale(effects.ego, 'ego')),
+    treasury: Math.max(0, (stats.treasury || 0) + scale(effects.treasury, 'treasury')),
+    population: Math.max(1000000, (stats.population || 0) + scale(effects.population, 'population')),
     turn: stats.turn,
   };
 }
