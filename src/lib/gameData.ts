@@ -356,9 +356,185 @@ export const EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'media_mogul',
+    title: 'O Magnata da Mídia',
+    description: 'Um bilionário comprou todos os canais de TV. Ele oferece cobertura favorável em troca de "favores".',
+    category: 'political',
+    choices: [
+      {
+        text: 'Aceitar a aliança',
+        effects: { ego: 15, corruption: 15, happiness: 5, reputation: -5 },
+        flavor: 'Propaganda 24h. O sonho de todo líder.',
+      },
+      {
+        text: 'Quebrar o monopólio midiático',
+        effects: { corruption: -10, happiness: 10, treasury: -15, ego: -10 },
+        flavor: 'Liberdade de imprensa. Que conceito incômodo.',
+      },
+      {
+        text: 'Nacionalizar a mídia',
+        effects: { ego: 20, reputation: -15, corruption: 10, happiness: -10 },
+        flavor: 'Se a mídia é sua, a verdade também é.',
+      },
+    ],
+  },
+  {
+    id: 'drug_trade',
+    title: 'Rota do Narcotráfico',
+    description: 'Seu país se tornou corredor do tráfico internacional. Cartéis oferecem "contribuições" generosas.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Aceitar as "contribuições" e vista grossa',
+        effects: { treasury: 35, corruption: 20, reputation: -15, happiness: -5 },
+        flavor: 'Dinheiro não tem cheiro. Especialmente esse.',
+      },
+      {
+        text: 'Guerra às drogas total',
+        effects: { military: 10, treasury: -30, corruption: -10, happiness: -5, reputation: 10 },
+        flavor: 'Uma guerra que ninguém vence. Mas fica bonito no currículo.',
+      },
+      {
+        text: 'Legalizar e regulamentar',
+        effects: { economy: 10, treasury: 20, reputation: 5, happiness: 5, corruption: -5 },
+        flavor: 'Se não pode vencer, tribute. Genial.',
+      },
+    ],
+  },
+  {
+    id: 'space_program',
+    title: 'Programa Espacial',
+    description: 'Cientistas propõem um programa espacial nacional. É caro, mas o prestígio seria imenso.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Investir bilhões no programa',
+        effects: { treasury: -50, reputation: 20, ego: 15, economy: 5 },
+        flavor: 'Para o espaço! Enquanto o povo não tem esgoto.',
+      },
+      {
+        text: 'Parceria com agência espacial estrangeira',
+        effects: { treasury: -15, reputation: 10, economy: 5, ego: -5 },
+        flavor: 'Dividir a glória. Pelo menos sai mais barato.',
+      },
+      {
+        text: 'Cancelar e investir em infraestrutura básica',
+        effects: { happiness: 10, economy: 10, treasury: -20, ego: -10 },
+        flavor: 'Esgoto antes de foguetes. Que prioridade chata.',
+      },
+    ],
+  },
+  {
+    id: 'religious_tension',
+    title: 'Tensão Religiosa',
+    description: 'Conflitos entre grupos religiosos ameaçam rasgar o tecido social. Líderes religiosos pedem audiência.',
+    category: 'social',
+    choices: [
+      {
+        text: 'Declarar estado laico e proibir interferência religiosa',
+        effects: { happiness: -10, reputation: 10, ego: 10, corruption: -5 },
+        flavor: 'Separar igreja e estado. Alguém vai ficar bravo.',
+      },
+      {
+        text: 'Favorecer o grupo majoritário',
+        effects: { happiness: 5, reputation: -15, ego: 15, corruption: 10 },
+        flavor: 'Dividir para conquistar. A tática mais antiga.',
+      },
+      {
+        text: 'Mediar diálogo inter-religioso',
+        effects: { happiness: 10, reputation: 10, ego: -10 },
+        flavor: 'Paz entre religiões? Você é otimista demais.',
+      },
+    ],
+  },
+  {
+    id: 'environmental_disaster',
+    title: 'Catástrofe Ambiental',
+    description: 'Rios envenenados, florestas desmatadas. ONGs internacionais ameaçam sanções ambientais.',
+    category: 'international',
+    choices: [
+      {
+        text: 'Criar reservas ambientais e regulamentação rígida',
+        effects: { economy: -10, reputation: 15, happiness: 5, treasury: -20 },
+        flavor: 'Salvar o planeta. Ou pelo menos parecer que tenta.',
+      },
+      {
+        text: 'Ignorar e acelerar a exploração',
+        effects: { economy: 10, treasury: 25, reputation: -20, happiness: -5 },
+        flavor: 'Árvores não votam.',
+      },
+      {
+        text: 'Vender créditos de carbono fraudulentos',
+        effects: { treasury: 20, corruption: 15, reputation: -5, ego: 10 },
+        flavor: 'Greenwashing: o crime perfeito do século XXI.',
+      },
+    ],
+  },
+  {
+    id: 'cyber_attack',
+    title: 'Ataque Cibernético Nacional',
+    description: 'Hackers derrubaram bancos, hospitais e infraestrutura. O país está no escuro digital.',
+    category: 'military',
+    choices: [
+      {
+        text: 'Contra-atacar com sua própria unidade hacker',
+        effects: { military: 10, reputation: -10, ego: 15, treasury: -20 },
+        flavor: 'Cyberguerra. A guerra do futuro já chegou.',
+      },
+      {
+        text: 'Investir em defesa cibernética robusta',
+        effects: { military: 5, economy: 5, treasury: -30, reputation: 5 },
+        flavor: 'Prevenção. Chato, mas necessário.',
+      },
+      {
+        text: 'Culpar uma nação rival e escalar tensões',
+        effects: { ego: 15, military: 5, reputation: -15, happiness: -5 },
+        flavor: 'Inimigo externo: a distração perfeita.',
+      },
+    ],
+  },
+  {
+    id: 'sports_victory',
+    title: 'Vitória Esportiva Histórica',
+    description: 'Sua seleção venceu a Copa do Mundo! O país inteiro celebra nas ruas.',
+    category: 'social',
+    choices: [
+      {
+        text: 'Aproveitar a euforia para aprovar leis impopulares',
+        effects: { ego: 15, corruption: 10, happiness: -5 },
+        flavor: 'Enquanto celebram, você legisla. Eficiente.',
+      },
+      {
+        text: 'Celebrar junto e investir em esportes',
+        effects: { happiness: 15, treasury: -15, reputation: 5, ego: 5 },
+        flavor: 'Pão e circo. O circo está excelente hoje.',
+      },
+      {
+        text: 'Reivindicar a vitória como resultado da sua liderança',
+        effects: { ego: 20, happiness: -5, reputation: -5 },
+        flavor: '"Sem minha gestão, jamais teriam vencido."',
+      },
+    ],
+  },
 ];
 
-export function getRandomEvent(excludeIds: string[] = []): GameEvent {
+import { CONDITIONAL_EVENTS } from "./conditionalEvents";
+
+export function getRandomEvent(excludeIds: string[] = [], stats?: GameStats): GameEvent {
+  // Check for conditional events first (30% chance if eligible)
+  if (stats && Math.random() < 0.3) {
+    const eligibleConditional = CONDITIONAL_EVENTS
+      .filter(e => !excludeIds.includes(e.id) && e.condition(stats))
+      .sort((a, b) => b.priority - a.priority);
+    
+    if (eligibleConditional.length > 0) {
+      // Pick from top 3 by priority with some randomness
+      const topPicks = eligibleConditional.slice(0, 3);
+      return topPicks[Math.floor(Math.random() * topPicks.length)];
+    }
+  }
+
   const available = EVENTS.filter(e => !excludeIds.includes(e.id));
   const pool = available.length > 0 ? available : EVENTS;
   return pool[Math.floor(Math.random() * pool.length)];
