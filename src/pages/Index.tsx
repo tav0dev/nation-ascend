@@ -74,7 +74,7 @@ export default function Index() {
   }, []);
 
   const handleChoice = useCallback((choice: Choice) => {
-    const newStats = applyEffects(stats, choice.effects);
+    const newStats = applyEffects(stats, choice.effects, difficulty);
     newStats.turn = stats.turn + 1;
     setStats(newStats);
     setLastChoice(choice);
