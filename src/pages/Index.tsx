@@ -36,7 +36,7 @@ export default function Index() {
   // Auto-save on every stat/phase change during gameplay
   useEffect(() => {
     if (phase === 'event' || phase === 'result') {
-      const save = { stats, recentEvents, currentEvent, phase };
+      const save = { stats, recentEvents, currentEvent, phase, decisionLog };
       localStorage.setItem('olider_save', JSON.stringify(save));
       setHasSave(true);
     }
