@@ -187,6 +187,7 @@ export default function Index() {
             </p>
           </div>
           <div className="flex items-center gap-4 font-mono text-xs text-muted-foreground">
+            <span>{DIFFICULTY_CONFIGS[difficulty].icon} {DIFFICULTY_CONFIGS[difficulty].label}</span>
             <span>Turno {stats.turn}</span>
             <span>💰 ${stats.treasury}B</span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
