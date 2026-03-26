@@ -350,4 +350,166 @@ export const CONDITIONAL_EVENTS: ConditionalEvent[] = [
       },
     ],
   },
+
+  // === POPULATION VERY LOW (<= 5_000_000) ===
+  {
+    id: 'demographic_collapse',
+    title: 'Colapso Demográfico',
+    description: 'A população despenca. Cidades se tornam fantasmas. Não há jovens suficientes para manter a economia.',
+    category: 'social',
+    priority: 9,
+    condition: (s) => s.population <= 5_000_000,
+    choices: [
+      {
+        text: 'Incentivar natalidade com bônus financeiro',
+        effects: { treasury: -25, happiness: 10, population: 1000000, ego: 5 },
+        flavor: 'Pagar para procriar. O governo como cupido.',
+      },
+      {
+        text: 'Abrir fronteiras para imigração em massa',
+        effects: { population: 3000000, happiness: -5, economy: 5, reputation: 5 },
+        flavor: 'Importar cidadãos. Solução rápida.',
+      },
+      {
+        text: 'Automatizar tudo e aceitar o declínio',
+        effects: { economy: 5, happiness: -10, ego: 10, military: -5 },
+        flavor: 'Um país de robôs. E um líder solitário.',
+      },
+    ],
+  },
+
+  // === ECONOMY + MILITARY BOTH HIGH (>= 60) ===
+  {
+    id: 'superpower_ambition',
+    title: 'Ambições de Superpotência',
+    description: 'Com economia forte e exército poderoso, aliados sugerem formar um bloco militar. O mundo treme.',
+    category: 'international',
+    priority: 8,
+    condition: (s) => s.economy >= 60 && s.military >= 60,
+    choices: [
+      {
+        text: 'Formar o bloco e liderar',
+        effects: { reputation: 15, ego: 20, military: 10, treasury: -20 },
+        flavor: 'NATO? Pfff. O SEU bloco é superior.',
+      },
+      {
+        text: 'Manter neutralidade estratégica',
+        effects: { reputation: 10, ego: -5, economy: 5 },
+        flavor: 'Suíça com esteroides. Neutro e poderoso.',
+      },
+      {
+        text: 'Usar a posição para chantagear vizinhos',
+        effects: { treasury: 30, corruption: 15, reputation: -15, ego: 15 },
+        flavor: 'Diplomacia do medo. Eficiente.',
+      },
+    ],
+  },
+
+  // === CORRUPTION LOW + HAPPINESS HIGH ===
+  {
+    id: 'paradise_envy',
+    title: 'Inveja Internacional',
+    description: 'Sua nação virou modelo. Outros países copiam suas políticas. Líderes pedem conselhos.',
+    category: 'international',
+    priority: 6,
+    condition: (s) => s.corruption <= 25 && s.happiness >= 65,
+    choices: [
+      {
+        text: 'Criar instituto de consultoria internacional',
+        effects: { treasury: 25, reputation: 15, ego: 15 },
+        flavor: 'Exportar sucesso. Com taxa de consultoria, claro.',
+      },
+      {
+        text: 'Compartilhar conhecimento gratuitamente',
+        effects: { reputation: 20, ego: -10, happiness: 5 },
+        flavor: 'Altruísmo? Quem é você?',
+      },
+      {
+        text: 'Guardar os segredos e manter a vantagem',
+        effects: { ego: 15, reputation: -5, economy: 5 },
+        flavor: 'Seu sucesso é SEU. Que descubram sozinhos.',
+      },
+    ],
+  },
+
+  // === ALL STATS MEDIOCRE (30-50 range) ===
+  {
+    id: 'stagnation',
+    title: 'Estagnação Generalizada',
+    description: 'Nada melhora, nada piora. O país é um retrato de mediocridade. Até a oposição está entediada.',
+    category: 'political',
+    priority: 5,
+    condition: (s) => s.economy >= 30 && s.economy <= 50 && s.happiness >= 30 && s.happiness <= 50,
+    choices: [
+      {
+        text: 'Fazer uma reforma radical e arriscar tudo',
+        effects: { economy: 15, happiness: -10, ego: 10, treasury: -20 },
+        flavor: 'Sacudir o barco. Pode virar, pode voar.',
+      },
+      {
+        text: 'Manter o curso e aceitar a mediocridade',
+        effects: { ego: 5, corruption: 5, happiness: -5 },
+        flavor: 'Mediocridade estável. Poderia ser pior.',
+      },
+      {
+        text: 'Criar uma crise artificial para justificar mudanças',
+        effects: { ego: 15, corruption: 15, military: 5, happiness: -10 },
+        flavor: 'Inventar problemas para parecer herói ao resolvê-los.',
+      },
+    ],
+  },
+
+  // === EGO LOW + REPUTATION HIGH ===
+  {
+    id: 'humility_reward',
+    title: 'Prêmio Nobel da Paz',
+    description: 'Contra todas as expectativas, você é indicado ao Nobel da Paz. O mundo aplaude.',
+    category: 'international',
+    priority: 7,
+    condition: (s) => s.ego <= 30 && s.reputation >= 60,
+    choices: [
+      {
+        text: 'Aceitar com humildade genuína',
+        effects: { reputation: 15, happiness: 10, ego: -5 },
+        flavor: 'Humildade. Talvez você tenha mudado mesmo.',
+      },
+      {
+        text: 'Usar como trampolim para ambições maiores',
+        effects: { ego: 25, reputation: 5, corruption: 5 },
+        flavor: 'E lá se vai a humildade. Foi bonito enquanto durou.',
+      },
+      {
+        text: 'Recusar — "não mereço" (falsa modéstia)',
+        effects: { ego: 15, reputation: 10, happiness: 5 },
+        flavor: 'Recusar o Nobel para parecer mais nobre. Meta.',
+      },
+    ],
+  },
+
+  // === MILITARY HIGH + HAPPINESS LOW ===
+  {
+    id: 'police_state',
+    title: 'Estado Policial',
+    description: 'As forças de segurança controlam cada esquina. Câmeras em toda parte. Ninguém ousa protestar.',
+    category: 'political',
+    priority: 8,
+    condition: (s) => s.military >= 65 && s.happiness <= 30,
+    choices: [
+      {
+        text: 'Intensificar — controle total é paz',
+        effects: { military: 10, happiness: -15, ego: 20, reputation: -15 },
+        flavor: '1984 era um manual, não um aviso.',
+      },
+      {
+        text: 'Reduzir gradualmente a presença militar',
+        effects: { military: -10, happiness: 15, reputation: 10, ego: -10 },
+        flavor: 'Soltar as rédeas. Assustador para um controlador.',
+      },
+      {
+        text: 'Converter militares em trabalhadores civis',
+        effects: { military: -15, economy: 10, happiness: 10, treasury: -10 },
+        flavor: 'De soldados a construtores. Swords to plowshares.',
+      },
+    ],
+  },
 ];

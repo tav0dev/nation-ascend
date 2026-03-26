@@ -554,6 +554,282 @@ export const EVENTS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'water_crisis',
+    title: 'Crise Hídrica Severa',
+    description: 'Os reservatórios secaram. Cidades inteiras ficam sem água. A população entra em pânico.',
+    category: 'social',
+    choices: [
+      {
+        text: 'Construir usinas de dessalinização',
+        effects: { treasury: -40, economy: 5, happiness: 10, reputation: 10 },
+        flavor: 'Transformar mar em água potável. Caro, mas funciona.',
+      },
+      {
+        text: 'Racionar água e punir desperdício',
+        effects: { happiness: -10, corruption: 5, ego: 10, treasury: -10 },
+        flavor: 'Controle total até na torneira. Seu estilo.',
+      },
+      {
+        text: 'Privatizar a distribuição de água',
+        effects: { economy: 8, happiness: -15, corruption: 10, treasury: 20 },
+        flavor: 'Água é um luxo agora. Literalmente.',
+      },
+    ],
+  },
+  {
+    id: 'currency_war',
+    title: 'Guerra Cambial',
+    description: 'Potências estrangeiras manipulam sua moeda. O valor despenca a cada hora.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Intervir no câmbio com reservas',
+        effects: { treasury: -30, economy: 10, reputation: 5 },
+        flavor: 'Queimar reservas para salvar a moeda. Clássico.',
+      },
+      {
+        text: 'Deixar flutuar e culpar o mercado',
+        effects: { economy: -10, ego: 10, happiness: -5 },
+        flavor: 'O mercado é soberano. Quando convém.',
+      },
+      {
+        text: 'Criar uma criptomoeda nacional',
+        effects: { economy: 5, reputation: -5, ego: 15, corruption: 5 },
+        flavor: 'BlockchainCoin™. O futuro é agora. Talvez.',
+      },
+    ],
+  },
+  {
+    id: 'cultural_heritage',
+    title: 'Patrimônio Cultural Ameaçado',
+    description: 'Sítios históricos estão desmoronando. A UNESCO ameaça retirar o status de patrimônio.',
+    category: 'social',
+    choices: [
+      {
+        text: 'Restaurar com investimento público',
+        effects: { treasury: -25, reputation: 10, happiness: 10 },
+        flavor: 'Preservar o passado. Irônico para quem quer reescrever a história.',
+      },
+      {
+        text: 'Demolir e construir shopping centers',
+        effects: { economy: 10, reputation: -15, happiness: -5, treasury: 15 },
+        flavor: 'Progresso! Quem precisa de ruínas?',
+      },
+      {
+        text: 'Transformar em atração turística kitsch',
+        effects: { treasury: 10, ego: 10, reputation: -5, happiness: 5 },
+        flavor: 'História com letreiro neon. Puro charme.',
+      },
+    ],
+  },
+  {
+    id: 'brain_drain',
+    title: 'Fuga de Cérebros',
+    description: 'Os melhores cientistas, médicos e engenheiros estão emigrando para países ricos.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Oferecer salários competitivos e bolsas',
+        effects: { treasury: -30, economy: 10, happiness: 5, reputation: 5 },
+        flavor: 'Pagar para ficarem. Novidade para você.',
+      },
+      {
+        text: 'Proibir emigração de profissionais qualificados',
+        effects: { happiness: -15, reputation: -15, ego: 15, military: 5 },
+        flavor: 'Escravidão intelectual. Com outro nome, claro.',
+      },
+      {
+        text: 'Importar talentos de países mais pobres',
+        effects: { economy: 5, reputation: -5, corruption: 5, population: 500000 },
+        flavor: 'Roubar cérebros dos outros. Cadeia alimentar acadêmica.',
+      },
+    ],
+  },
+  {
+    id: 'election_pressure',
+    title: 'Pressão por Eleições Livres',
+    description: 'A comunidade internacional e a oposição exigem eleições democráticas. A pressão é enorme.',
+    category: 'political',
+    choices: [
+      {
+        text: 'Realizar eleições... com candidato único',
+        effects: { ego: 20, reputation: -20, happiness: -10, corruption: 15 },
+        flavor: '99.8% dos votos. Democracia perfeita.',
+      },
+      {
+        text: 'Aceitar eleições genuínas',
+        effects: { happiness: 20, reputation: 20, ego: -25, corruption: -10 },
+        flavor: 'Arriscar perder o poder? Que loucura.',
+      },
+      {
+        text: 'Prometer eleições "em breve" e nunca cumprir',
+        effects: { ego: 10, reputation: -10, happiness: -5, corruption: 5 },
+        flavor: 'O "em breve" mais longo da história política.',
+      },
+    ],
+  },
+  {
+    id: 'labor_strike',
+    title: 'Greve Geral Nacional',
+    description: 'Trabalhadores de todos os setores cruzam os braços. A economia para. O país congela.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Negociar aumento salarial',
+        effects: { happiness: 15, treasury: -25, economy: -5, ego: -10 },
+        flavor: 'Ceder às massas. Temporariamente.',
+      },
+      {
+        text: 'Declarar a greve ilegal e reprimir',
+        effects: { happiness: -15, military: 5, reputation: -10, ego: 15 },
+        flavor: 'Direito de greve? Não neste governo.',
+      },
+      {
+        text: 'Substituir grevistas por robôs e automação',
+        effects: { economy: 10, happiness: -10, population: -1000000, treasury: -20 },
+        flavor: 'O futuro do trabalho: sem trabalhadores.',
+      },
+    ],
+  },
+  {
+    id: 'diplomatic_marriage',
+    title: 'Casamento Diplomático',
+    description: 'Uma família real estrangeira propõe casamento com um membro da elite do país para selar aliança.',
+    category: 'international',
+    choices: [
+      {
+        text: 'Aceitar a aliança matrimonial',
+        effects: { reputation: 15, ego: 10, economy: 5, happiness: -5 },
+        flavor: 'Amor? Não. Geopolítica em forma de casamento.',
+      },
+      {
+        text: 'Recusar — somos uma república!',
+        effects: { ego: 15, reputation: -5, happiness: 5 },
+        flavor: 'Valores republicanos. Quando conveniente.',
+      },
+      {
+        text: 'Aceitar e depois trair a aliança',
+        effects: { treasury: 20, corruption: 15, reputation: -20, ego: 10 },
+        flavor: 'Prometeu e não cumpriu. Outra terça-feira.',
+      },
+    ],
+  },
+  {
+    id: 'food_export',
+    title: 'Boom Agrícola',
+    description: 'Safra recorde! O país produz mais alimentos do que pode consumir. O mercado global espera.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Exportar tudo pelo maior preço',
+        effects: { treasury: 40, economy: 10, happiness: -5, reputation: 5 },
+        flavor: 'Vender comida enquanto vizinhos passam fome. Negócios.',
+      },
+      {
+        text: 'Distribuir excedente para os mais pobres',
+        effects: { happiness: 15, reputation: 10, ego: -10, treasury: -10 },
+        flavor: 'Generosidade? Deve estar se sentindo bem hoje.',
+      },
+      {
+        text: 'Estocar como reserva estratégica',
+        effects: { military: 5, economy: 5, happiness: 5 },
+        flavor: 'Comida é poder. Literalmente.',
+      },
+    ],
+  },
+  {
+    id: 'spy_network',
+    title: 'Rede de Espionagem Descoberta',
+    description: 'Agentes de uma potência estrangeira são capturados espionando segredos militares e econômicos.',
+    category: 'military',
+    choices: [
+      {
+        text: 'Expulsar todos os diplomatas do país agressor',
+        effects: { reputation: 5, military: 5, economy: -10, ego: 15 },
+        flavor: 'Expulsão dramática. A mídia adora.',
+      },
+      {
+        text: 'Usar os espiões para alimentar desinformação',
+        effects: { military: 10, ego: 15, corruption: 5 },
+        flavor: 'O jogo dentro do jogo. Xadrez geopolítico.',
+      },
+      {
+        text: 'Negociar troca de espiões em segredo',
+        effects: { reputation: 5, treasury: 15, corruption: 10, ego: -5 },
+        flavor: 'Diplomacia das sombras. Seu ambiente natural.',
+      },
+    ],
+  },
+  {
+    id: 'ai_revolution',
+    title: 'Revolução da Inteligência Artificial',
+    description: 'IAs substituem empregos em massa. Milhões ficam desempregados da noite pro dia.',
+    category: 'economy',
+    choices: [
+      {
+        text: 'Taxar empresas de IA e criar renda básica',
+        effects: { happiness: 10, economy: -5, treasury: -15, reputation: 10 },
+        flavor: 'Redistribuir riqueza dos robôs. Poético.',
+      },
+      {
+        text: 'Abraçar a IA e ignorar o desemprego',
+        effects: { economy: 15, happiness: -15, reputation: -5, ego: 10 },
+        flavor: 'Progresso a qualquer custo. Humanos são opcionais.',
+      },
+      {
+        text: 'Proibir IA e proteger empregos tradicionais',
+        effects: { happiness: 5, economy: -10, reputation: -10, ego: 10 },
+        flavor: 'Contra o futuro. Boa sorte com isso.',
+      },
+    ],
+  },
+  {
+    id: 'volcano_eruption',
+    title: 'Erupção Vulcânica',
+    description: 'Um vulcão adormecido desperta, devastando cidades próximas e cobrindo o céu de cinzas.',
+    category: 'social',
+    choices: [
+      {
+        text: 'Evacuar e realocar todos os afetados',
+        effects: { treasury: -35, happiness: 10, reputation: 10 },
+        flavor: 'Salvar vidas. Caro, mas moralmente correto.',
+      },
+      {
+        text: 'Transformar em atração turística',
+        effects: { treasury: 15, ego: 10, happiness: -5, reputation: -5 },
+        flavor: 'Vulcão ativo = ingresso caro. Genial e perigoso.',
+      },
+      {
+        text: 'Culpar mudanças climáticas e pedir ajuda',
+        effects: { treasury: 20, reputation: 5, ego: 5, corruption: 5 },
+        flavor: 'Oportunismo geológico. Novo gênero político.',
+      },
+    ],
+  },
+  {
+    id: 'olympic_bid',
+    title: 'Candidatura Olímpica',
+    description: 'Sua nação pode se candidatar para sediar as Olimpíadas. Prestígio imenso, custo astronômico.',
+    category: 'international',
+    choices: [
+      {
+        text: 'Candidatar-se e investir bilhões',
+        effects: { treasury: -50, reputation: 20, ego: 15, happiness: 5 },
+        flavor: 'Olimpíadas: o caminho mais caro para a autoestima.',
+      },
+      {
+        text: 'Candidatar-se com orçamento fraudulento',
+        effects: { treasury: -20, corruption: 20, reputation: 10, ego: 15 },
+        flavor: 'Números maquiados. Como toda grande obra pública.',
+      },
+      {
+        text: 'Recusar — dinheiro em infraestrutura básica',
+        effects: { happiness: 10, economy: 5, ego: -10 },
+        flavor: 'Sem glamour, mas com esgoto funcionando.',
+      },
+    ],
+  },
 ];
 
 import { CONDITIONAL_EVENTS } from "./conditionalEvents";
