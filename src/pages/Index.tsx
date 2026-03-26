@@ -179,7 +179,12 @@ export default function Index() {
       </AnimatePresence>
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="mb-6 flex flex-col gap-2 border-b border-border pb-4 md:flex-row md:items-center md:justify-between">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="mb-6 flex flex-col gap-2 border-b border-border pb-4 md:flex-row md:items-center md:justify-between"
+        >
           <div>
             <h1 className="font-display text-2xl font-bold text-gold">O LÍDER</h1>
             <p className={`font-mono text-xs uppercase tracking-widest ${TIER_COLORS[tier]}`}>
@@ -188,17 +193,36 @@ export default function Index() {
           </div>
           <div className="flex items-center gap-4 font-mono text-xs text-muted-foreground">
             <span>{DIFFICULTY_CONFIGS[difficulty].icon} {DIFFICULTY_CONFIGS[difficulty].label}</span>
-            <span>Turno {stats.turn}</span>
-            <span>💰 ${stats.treasury}B</span>
+            <motion.span
+              key={stats.turn}
+              initial={{ scale: 1.3 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              Turno {stats.turn}
+            </motion.span>
+            <motion.span
+              key={stats.treasury}
+              initial={{ color: "hsl(var(--gold))" }}
+              animate={{ color: "hsl(var(--muted-foreground))" }}
+              transition={{ duration: 0.6 }}
+            >
+              💰 ${stats.treasury}B
+            </motion.span>
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
             <DecisionLog entries={decisionLog} />
             <AchievementPanel />
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid gap-6 md:grid-cols-[280px_1fr]">
           {/* Stats Panel */}
-          <div className="space-y-4">
+          <motion.div
+            className="space-y-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <div className="space-y-3 rounded border border-border bg-card p-4">
               <h2 className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 Indicadores Nacionais
@@ -211,7 +235,7 @@ export default function Index() {
               <StatBar label="Ego" value={stats.ego} colorClass="stat-ego" icon="👑" showChange={lastEffects.ego} />
             </div>
             <AdvisorPanel stats={stats} />
-          </div>
+          </motion.div>
 
           {/* Main Panel */}
           <div>
