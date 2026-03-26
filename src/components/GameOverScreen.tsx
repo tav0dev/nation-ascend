@@ -26,7 +26,7 @@ export function GameOverScreen({ reason, won, stats, onRestart }: GameOverScreen
       <motion.div
         initial={{ scale: 0.8, y: 40 }}
         animate={{ scale: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay: 0.2 }}
         className={`relative max-w-lg rounded border p-8 text-center ${won ? 'border-gold glow-gold' : 'border-blood glow-blood'}`}
       >
         <motion.h1

@@ -57,7 +57,7 @@ export function StatBar({ label, value, max = 100, colorClass, icon, showChange 
           className={`h-full rounded-sm ${colorClass}`}
           initial={false}
           animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
         />
         {isDanger && (
           <motion.div
