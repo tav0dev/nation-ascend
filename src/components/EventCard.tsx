@@ -22,7 +22,7 @@ const containerVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       staggerChildren: 0.08,
       delayChildren: 0.2,
     },
@@ -31,18 +31,18 @@ const containerVariants = {
     opacity: 0,
     scale: 0.96,
     x: -60,
-    transition: { duration: 0.35, ease: "easeIn" },
+    transition: { duration: 0.35, ease: "easeIn" as const },
   },
 };
 
 const headerVariants = {
   hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
 
 const choiceVariants = {
   hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
 
 export function EventCard({ event, onChoice }: EventCardProps) {
