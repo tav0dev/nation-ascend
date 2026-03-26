@@ -21,6 +21,22 @@ import {
   TIER_LABELS,
   TIER_COLORS,
 } from "@/lib/gameData";
+import {
+  sfxClick,
+  sfxChoiceSelect,
+  sfxNewEvent,
+  sfxResult,
+  sfxDanger,
+  sfxAchievement,
+  sfxDefeat,
+  sfxVictory,
+  sfxStartGame,
+  startAmbient,
+  stopAmbient,
+  isMuted,
+  setMuted,
+  initMuteState,
+} from "@/lib/audioEngine";
 
 type Phase = 'menu' | 'event' | 'result' | 'gameover';
 
@@ -36,6 +52,15 @@ export default function Index() {
   const [quote] = useState(getRandomQuote());
   const [hasSave, setHasSave] = useState(() => !!localStorage.getItem('olider_save'));
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
+  const [muted, setMutedState] = useState(() => initMuteState());
+
+  const toggleMute = useCallback(() => {
+    const next = !muted;
+    setMutedState(next);
+    setMuted(next);
+    if (!next && phase !== 'menu') startAmbient();
+    if (next) stopAmbient();
+  }, [muted, phase]);
 
   // Auto-save on every stat/phase change during gameplay
   useEffect(() => {
@@ -47,6 +72,8 @@ export default function Index() {
   }, [stats, phase, recentEvents, currentEvent]);
 
   const startGame = useCallback((diff: Difficulty) => {
+    sfxStartGame();
+    startAmbient();
     localStorage.removeItem('olider_save');
     setDifficulty(diff);
     const initial = DIFFICULTY_CONFIGS[diff].initialStats;
@@ -62,6 +89,8 @@ export default function Index() {
     const raw = localStorage.getItem('olider_save');
     if (!raw) return;
     try {
+      sfxClick();
+      startAmbient();
       const save = JSON.parse(raw);
       setStats(save.stats);
       setRecentEvents(save.recentEvents || []);
@@ -75,6 +104,7 @@ export default function Index() {
   }, []);
 
   const handleChoice = useCallback((choice: Choice) => {
+    sfxChoiceSelect();
     const newStats = applyEffects(stats, choice.effects, difficulty);
     newStats.turn = stats.turn + 1;
     setStats(newStats);
@@ -87,18 +117,28 @@ export default function Index() {
       flavor: choice.flavor,
       effects: choice.effects,
     }]);
+
+    // Check for danger states
+    if (newStats.happiness <= 15 || newStats.economy <= 10 || newStats.treasury <= 15) {
+      setTimeout(sfxDanger, 300);
+    }
+
     const gameOver = checkGameOver(newStats);
     if (gameOver.over) {
       localStorage.removeItem('olider_save');
       setHasSave(false);
       setGameOverInfo({ reason: gameOver.reason!, won: !!gameOver.won });
+      stopAmbient();
+      setTimeout(() => gameOver.won ? sfxVictory() : sfxDefeat(), 500);
       setPhase('gameover');
     } else {
+      setTimeout(sfxResult, 200);
       setPhase('result');
     }
-  }, [stats]);
+  }, [stats, difficulty, currentEvent]);
 
   const nextTurn = useCallback(() => {
+    sfxNewEvent();
     const recent = [...recentEvents, currentEvent.id].slice(-5);
     setRecentEvents(recent);
     const evt = getRandomEvent(recent, stats);
@@ -106,18 +146,40 @@ export default function Index() {
     setLastChoice(null);
     setLastEffects({});
     setPhase('event');
-  }, [currentEvent.id, recentEvents]);
+  }, [currentEvent.id, recentEvents, stats]);
 
   const tier = getNationTier(stats);
   const { newlyUnlocked, dismissNew } = useAchievements(stats, stats.turn);
 
+  // Play achievement sound
+  useEffect(() => {
+    if (newlyUnlocked) sfxAchievement();
+  }, [newlyUnlocked]);
+
+  // Mute button component
+  const MuteButton = (
+    <button
+      onClick={toggleMute}
+      className="rounded border border-border px-2 py-1 font-mono text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+      title={muted ? 'Ativar som' : 'Desativar som'}
+    >
+      {muted ? '🔇' : '🔊'}
+    </button>
+  );
+
   if (phase === 'gameover') {
-    return <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={() => setPhase('menu')} />;
+    return (
+      <>
+        <div className="fixed top-4 right-4 z-50">{MuteButton}</div>
+        <GameOverScreen reason={gameOverInfo.reason} won={gameOverInfo.won} stats={stats} onRestart={() => { stopAmbient(); setPhase('menu'); }} />
+      </>
+    );
   }
 
   if (phase === 'menu') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center p-6">
+        <div className="fixed top-4 right-4 z-50">{MuteButton}</div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -212,6 +274,7 @@ export default function Index() {
             <span>👥 {(stats.population / 1_000_000).toFixed(1)}M</span>
             <DecisionLog entries={decisionLog} />
             <AchievementPanel />
+            {MuteButton}
           </div>
         </motion.div>
 
